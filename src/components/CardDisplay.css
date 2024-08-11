@@ -1,0 +1,27 @@
+.ygocard {
+    width: 320px;
+    height: 550px;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px;
+}
+
+.ygocard.monster {   
+    border: 4px solid #b09030;
+    background-image: repeating-linear-gradient(36deg in oklab, #e0d040, #d8b133 5px);
+}
+
+.ygocard.magic {
+    border: 4px solid #00C010;
+    background-image: repeating-linear-gradient(36deg in oklab, #00a010, #02800e 5px);
+}
+
+.ygocard.ritual {
+    border: 4px solid #004dc0;
+    background-image: repeating-linear-gradient(36deg in oklab, #0065a0, #047abe 5px);
+}
+
+.ygocard.trap {
+    border: 4px solid #a00050;
+    background-image: repeating-linear-gradient(36deg in oklab, #eb0070, #ff3396 5px);
+}
