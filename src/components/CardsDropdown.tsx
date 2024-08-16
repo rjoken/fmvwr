@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import Card from "../Card";
-import "./CardsDropdown.css";
+import styles from "./CardsDropdown.module.css";
 
 interface Props {
   cards: Card[];
@@ -30,11 +30,11 @@ function CardsDropdown({ cards, onSelectItem }: Props) {
           <Dropdown.Toggle
             variant="secondary"
             id="dropdown-basic"
-            className="drop-button"
+            className={styles.drop_button}
           >
             {text}
           </Dropdown.Toggle>
-          <Dropdown.Menu className="menu-scroll">
+          <Dropdown.Menu className={styles.menu_scroll}>
             <div className="sticky-top bg-white p-2">
               <input
                 type="text"

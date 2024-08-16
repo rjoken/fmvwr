@@ -3,7 +3,7 @@ import Card from "../Card";
 import GuardianStar from "../GuardianStar";
 import CardType from "../CardType";
 import CardAttribute from "../CardAttribute";
-import "./CardDisplay.css";
+import styles from "./CardDisplay.module.css";
 
 interface Props {
   selectedItem: Card;
@@ -14,21 +14,21 @@ function CardDisplay({ selectedItem }: Props) {
   for (let i = 0; i < selectedItem.level; i++) {
     starsString.push(<span key={i}>★</span>);
   }
-  let containerClass = "monster";
+  let containerClass = styles.monster;
   if (
     selectedItem.type === CardType.Magic ||
     selectedItem.type === CardType.Equip
   ) {
-    containerClass = "magic";
+    containerClass = styles.magic;
   } else if (selectedItem.type === CardType.Trap) {
-    containerClass = "trap";
+    containerClass = styles.trap;
   } else if (selectedItem.type === CardType.Ritual) {
-    containerClass = "ritual";
+    containerClass = styles.ritual;
   }
   return (
     <>
       <center>
-        <div className={["ygocard", containerClass].join(" ")}>
+        <div className={[styles.ygocard, containerClass].join(" ")}>
           <h3>{selectedItem.id}</h3>
           <h2>{selectedItem.name}</h2>
           {starsString}

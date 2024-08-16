@@ -1,8 +1,8 @@
-.drop-button {
+.drop_button {
     width: 320px;
 }
 
-.menu-scroll {
+.menu_scroll {
     overflow-y: scroll;
     max-height: 200px;
     width: 320px;

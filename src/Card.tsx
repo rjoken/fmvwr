@@ -5,55 +5,23 @@ import Fusion from "./Fusion";
 import Ritual from "./Ritual";
 
 class Card {
-  name: string;
-  description: string;
-  id: number;
-  guardianStarA: GuardianStar;
-  guardianStarB: GuardianStar;
-  level: number;
-  type: CardType;
-  attribute: CardAttribute;
-  attack: number;
-  defense: number;
-  cost: number;
-  password: string;
-  equips: number[];
-  fusions: Fusion[];
-  rituals: Ritual[];
-
   constructor(
-    name: string,
-    description: string,
-    id: number,
-    guardianStarA: GuardianStar,
-    guardianStarB: GuardianStar,
-    level: number,
-    type: CardType,
-    attribute: CardAttribute,
-    attack: number,
-    defense: number,
-    cost: number,
-    password: string,
-    equips: number[],
-    fusions: Fusion[],
-    rituals: Ritual[]
-  ) {
-    this.name = name;
-    this.description = description;
-    this.id = id;
-    this.guardianStarA = guardianStarA;
-    this.guardianStarB = guardianStarB;
-    this.level = level;
-    this.type = type;
-    this.attribute = attribute;
-    this.attack = attack;
-    this.defense = defense;
-    this.cost = cost;
-    this.password = password;
-    this.equips = equips;
-    this.fusions = fusions;
-    this.rituals = rituals;
-  }
+    public name: string,
+    public description: string,
+    public id: number,
+    public guardianStarA: GuardianStar,
+    public guardianStarB: GuardianStar,
+    public level: number,
+    public type: CardType,
+    public attribute: CardAttribute,
+    public attack: number,
+    public defense: number,
+    public cost: number,
+    public password: string,
+    public equips: number[],
+    public fusions: Fusion[],
+    public rituals: Ritual[]
+  ) {}
 }
 
 export default Card;
