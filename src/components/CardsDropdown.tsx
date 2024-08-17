@@ -23,37 +23,33 @@ function CardsDropdown({ cards, onSelectItem }: Props) {
 
   return (
     <>
-      <center>
-        <Dropdown
-          onSelect={(eventKey) => handleDropdownSelect(Number(eventKey))}
+      <Dropdown onSelect={(eventKey) => handleDropdownSelect(Number(eventKey))}>
+        <Dropdown.Toggle
+          variant="secondary"
+          id="dropdown-basic"
+          className={styles.dropButton}
         >
-          <Dropdown.Toggle
-            variant="secondary"
-            id="dropdown-basic"
-            className={styles.drop_button}
-          >
-            {text}
-          </Dropdown.Toggle>
-          <Dropdown.Menu className={styles.menu_scroll}>
-            <div className="sticky-top bg-white p-2">
-              <input
-                type="text"
-                className="form-control border-0 border-bottom shadow-none mb-2"
-                placeholder="Search..."
-                value={searchTerm}
-                onInput={(e) =>
-                  setSearchTerm((e.target as HTMLInputElement).value)
-                }
-              />
-            </div>
-            {filteredOptions.map((item, index) => (
-              <Dropdown.Item key={index} eventKey={item.id}>
-                {item.name}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-      </center>
+          {text}
+        </Dropdown.Toggle>
+        <Dropdown.Menu className={styles.menu_scroll}>
+          <div className="sticky-top bg-white p-2">
+            <input
+              type="text"
+              className="form-control border-0 border-bottom shadow-none mb-2"
+              placeholder="Search..."
+              value={searchTerm}
+              onInput={(e) =>
+                setSearchTerm((e.target as HTMLInputElement).value)
+              }
+            />
+          </div>
+          {filteredOptions.map((item, index) => (
+            <Dropdown.Item key={index} eventKey={item.id}>
+              {item.name}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
     </>
   );
 }

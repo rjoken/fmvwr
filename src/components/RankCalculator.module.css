@@ -1,0 +1,61 @@
+.calculator {
+    display: grid;
+    gap: 20px;
+    border: 4px solid hsl(190, 50%, 40%);
+    background-image: repeating-linear-gradient(36deg in oklab, hsl(190, 70%, 50%),  hsl(190, 70%, 60%) 5px);
+    padding: 20px;
+    border-radius: 25px;
+}
+
+.vcContainer, .lpContainer, .rankDisplay{
+    display: grid;
+    grid-template-columns: max-content auto;
+    align-items: center;
+}
+
+label {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.dropButton {
+    width: 100%;
+}
+
+.varsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rankVar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.varLabel {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.plusButton {
+    width: 100px;
+}
+
+.resetButton {
+    max-width: 100px;
+}
+
+.minusButton, .plusButton, .resetButton {
+    margin-left: 10px;
+}
+
+.minusButton, .plusButton, .dropButton, .resetButton {
+    background-color: hsl(190, 50%, 40%) !important;
+    border: 1px solid hsl(190, 50%, 40%) !important;
+}
+
+.minusButton:hover, .plusButton:hover, .dropButton:hover, .resetButton:hover {
+    background-color: hsl(190, 50%, 50%) !important;
+}
