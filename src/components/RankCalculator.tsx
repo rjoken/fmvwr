@@ -15,7 +15,7 @@ function RankCalculator() {
     { name: "7000-7999", id: 1 },
     { name: "1000-6999", id: 2 },
     { name: "100-999", id: 3 },
-    { name: "<100>", id: 4 },
+    { name: "<100", id: 4 },
   ];
 
   /* Rank calculation variables as states */
