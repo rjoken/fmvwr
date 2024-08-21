@@ -1,6 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./RankCalculator.module.css";
 import { Button, Dropdown, DropdownMenu } from "react-bootstrap";
+
+class RankCalcState {
+  victoryCondition: number;
+  lifePoints: number;
+  fusions: number;
+  effectives: number;
+  facedowns: number;
+  magics: number;
+  equips: number;
+  traps: number;
+  defensives: number;
+  cardsUsed: number;
+  turns: number;
+
+  constructor(
+    victoryCondition: number = 0,
+    lifePoints: number = 0,
+    fusions: number = 0,
+    effectives: number = 0,
+    facedowns: number = 0,
+    magics: number = 0,
+    equips: number = 0,
+    traps: number = 0,
+    defensives: number = 0,
+    cardsUsed: number = 0,
+    turns: number = 0
+  ) {
+    this.victoryCondition = victoryCondition < 0 ? 0 : victoryCondition;
+    this.lifePoints = lifePoints < 0 ? 0 : lifePoints;
+    this.fusions = fusions < 0 ? 0 : fusions;
+    this.effectives = effectives < 0 ? 0 : effectives;
+    this.facedowns = facedowns < 0 ? 0 : facedowns;
+    this.magics = magics < 0 ? 0 : magics;
+    this.equips = equips < 0 ? 0 : equips;
+    this.traps = traps < 0 ? 0 : traps;
+    this.defensives = defensives < 0 ? 0 : defensives;
+    this.cardsUsed = cardsUsed < 0 ? 0 : cardsUsed;
+    this.turns = turns < 0 ? 0 : turns;
+  }
+}
 
 function RankCalculator() {
   /* Assign these IDs to different victory types and life point thresholds */
@@ -18,93 +58,73 @@ function RankCalculator() {
     { name: "<100", id: 4 },
   ];
 
-  /* Rank calculation variables as states */
-  const [victoryCondition, setVictoryCondition] = useState(0);
-  const [lifePoints, setLifePoints] = useState(0);
-  const [fusions, setFusions] = useState(0);
-  const [effectives, setEffectives] = useState(0);
-  const [facedowns, setFacedowns] = useState(0);
-  const [magics, setMagics] = useState(0);
-  const [equips, setEquips] = useState(0);
-  const [traps, setTraps] = useState(0);
-  const [defensives, setDefensives] = useState(0);
-  const [cardsUsed, setCardsUsed] = useState(0);
-  const [turns, setTurns] = useState(0);
+  /* State of rank calculator variables stored in RankCalcState object */
+  const [rankCalcState, setRankCalcState] = useState<RankCalcState>(
+    new RankCalcState()
+  );
 
-  /* When a plus or minus button is clicked, set the counts appropriately */
-  const clickAddFusions = () => {
-    setFusions((fusions) => fusions + 1);
+  // Update duelPoints whenever rankCalcState is updated
+  const [duelPoints, setDuelPoints] = useState<number>(0);
+  useEffect(() => {
+    setDuelPoints(
+      calculateTotalPoints(
+        rankCalcState.victoryCondition,
+        rankCalcState.fusions,
+        rankCalcState.cardsUsed,
+        rankCalcState.facedowns,
+        rankCalcState.effectives,
+        rankCalcState.equips,
+        rankCalcState.magics,
+        rankCalcState.traps,
+        rankCalcState.turns,
+        rankCalcState.defensives,
+        rankCalcState.lifePoints
+      )
+    );
+  }, [rankCalcState]);
+
+  /*
+   * When a plus or minus button is clicked, set the counts appropriately
+   * Handle dynamically given a key of the state object to update, and whether we are +ing or -ing
+   */
+  const handleButton = (key: keyof RankCalcState, operation: "+" | "-") => {
+    setRankCalcState((prev) => ({
+      /*
+       * Return the previous RankCalcState, with the [key] property changed using spread operator.
+       * If the operation is not +, and -ing 1 from the current RankCalcState would be <= 0,
+       * return prev.
+       */
+      ...prev,
+      [key]:
+        operation === "+"
+          ? prev[key] + 1
+          : prev[key] - 1 >= 0
+          ? prev[key] - 1
+          : prev[key],
+    }));
   };
 
-  const clickMinusFusions = () => {
-    fusions > 0 && setFusions((fusions) => fusions - 1);
-  };
+  /*
+   * "map" of information for buttons and labels, at least for the simple controls.
+   * Dropdowns created more manually.
+   */
+  const rankCalcVars = [
+    { label: "Fusions: ", key: "fusions" as keyof RankCalcState },
+    { label: "Effective attacks: ", key: "effectives" as keyof RankCalcState },
+    { label: "Facedown plays: ", key: "facedowns" as keyof RankCalcState },
+    { label: "Magics activated: ", key: "magics" as keyof RankCalcState },
+    { label: "Equips used: ", key: "equips" as keyof RankCalcState },
+    { label: "Traps activated: ", key: "traps" as keyof RankCalcState },
+    { label: "Defensive wins: ", key: "defensives" as keyof RankCalcState },
+    { label: "Cards used: ", key: "cardsUsed" as keyof RankCalcState },
+    { label: "Turns: ", key: "turns" as keyof RankCalcState },
+  ];
 
-  const clickAddEffectives = () => {
-    setEffectives((effectives) => effectives + 1);
-  };
-
-  const clickMinusEffectives = () => {
-    effectives > 0 && setEffectives((effectives) => effectives - 1);
-  };
-
-  const clickAddFacedowns = () => {
-    setFacedowns((facedowns) => facedowns + 1);
-  };
-
-  const clickMinusFacedowns = () => {
-    facedowns > 0 && setFacedowns((facedowns) => facedowns - 1);
-  };
-
-  const clickAddMagics = () => {
-    setMagics((magics) => magics + 1);
-  };
-
-  const clickMinusMagics = () => {
-    magics > 0 && setMagics((magics) => magics - 1);
-  };
-
-  const clickAddEquips = () => {
-    setEquips((equips) => equips + 1);
-  };
-
-  const clickMinusEquips = () => {
-    equips > 0 && setEquips((equips) => equips - 1);
-  };
-
-  const clickAddTraps = () => {
-    setTraps((traps) => traps + 1);
-  };
-
-  const clickMinusTraps = () => {
-    traps > 0 && setTraps((traps) => traps - 1);
-  };
-
-  const clickAddDefensives = () => {
-    setDefensives((defensives) => defensives + 1);
-  };
-
-  const clickMinusDefensives = () => {
-    defensives > 0 && setDefensives((defensives) => defensives - 1);
-  };
-
-  const clickAddCardsUsed = () => {
-    setCardsUsed((cardsUsed) => cardsUsed + 1);
-  };
-
-  const clickMinusCardsUsed = () => {
-    cardsUsed > 0 && setCardsUsed((cardsUsed) => cardsUsed - 1);
-  };
-
-  const clickAddTurns = () => {
-    setTurns((turns) => turns + 1);
-  };
-
-  const clickMinusTurns = () => {
-    turns > 0 && setTurns((turns) => turns - 1);
-  };
-
-  /* Calculate points for each rank calculation variable */
+  /*
+   * Calculate points for each rank calculation variable
+   * This could be generalised into a function that takes a set of values and thresholds,
+   * but I find it less readable!
+   */
   const getTurnPoints = (turns: number) => {
     if (turns <= 4) return 12;
     else if (turns <= 8) return 8;
@@ -195,8 +215,20 @@ function RankCalculator() {
   };
 
   /* Final duel score taking all duel variables into account */
-  const calculateTotalPoints = () => {
-    var victoryConditionPoints = 0;
+  const calculateTotalPoints = (
+    victoryCondition: number,
+    fusions: number,
+    cardsUsed: number,
+    facedowns: number,
+    effectives: number,
+    equips: number,
+    magics: number,
+    traps: number,
+    turns: number,
+    defensives: number,
+    lifePoints: number
+  ) => {
+    let victoryConditionPoints = 0;
     if (victoryCondition === 0) victoryConditionPoints = 2;
     else if (victoryCondition === 1) victoryConditionPoints = -40;
     else if (victoryCondition === 2) victoryConditionPoints = 40;
@@ -232,17 +264,7 @@ function RankCalculator() {
 
   /* Reset all values to zero */
   const resetCalc = () => {
-    setFusions(0);
-    setEffectives(0);
-    setFacedowns(0);
-    setMagics(0);
-    setEquips(0);
-    setTraps(0);
-    setDefensives(0);
-    setCardsUsed(0);
-    setTurns(0);
-    setLifePoints(0);
-    setVictoryCondition(0);
+    setRankCalcState(new RankCalcState());
   };
 
   return (
@@ -253,17 +275,26 @@ function RankCalculator() {
           <label htmlFor="vcDropdown">Victory Condition: </label>
           <Dropdown
             id="vcDropdown"
-            onSelect={(eventKey) => setVictoryCondition(Number(eventKey))}
+            onSelect={(eventKey) =>
+              setRankCalcState({
+                ...rankCalcState,
+                victoryCondition: Number(eventKey),
+              })
+            }
           >
             <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
               {
-                victoryConditions.filter((vc) => vc.id === victoryCondition)[0]
-                  .name
+                // Dropdown toggle text displayed is the currently selected item's name
+                victoryConditions.filter(
+                  (vc) => vc.id === rankCalcState.victoryCondition
+                )[0].name
               }
             </Dropdown.Toggle>
             <DropdownMenu>
               {victoryConditions.map((vc) => (
-                <Dropdown.Item eventKey={vc.id}>{vc.name}</Dropdown.Item>
+                <Dropdown.Item key={vc.id} eventKey={vc.id}>
+                  {vc.name}
+                </Dropdown.Item>
               ))}
             </DropdownMenu>
           </Dropdown>
@@ -272,166 +303,56 @@ function RankCalculator() {
           <label htmlFor="lpDropdown">Remaining Life Points: </label>
           <Dropdown
             id="lpDropdown"
-            onSelect={(eventKey) => setLifePoints(Number(eventKey))}
+            onSelect={(eventKey) =>
+              setRankCalcState({
+                ...rankCalcState,
+                lifePoints: Number(eventKey),
+              })
+            }
           >
             <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
-              {lifePointsPossible.filter((lp) => lp.id === lifePoints)[0].name}
+              {
+                // Dropdown toggle text displayed is the currently selected item
+                lifePointsPossible.filter(
+                  (lp) => lp.id === rankCalcState.lifePoints
+                )[0].name
+              }
             </Dropdown.Toggle>
             <DropdownMenu>
               {lifePointsPossible.map((lp) => (
-                <Dropdown.Item eventKey={lp.id}>{lp.name}</Dropdown.Item>
+                <Dropdown.Item key={lp.id} eventKey={lp.id}>
+                  {lp.name}
+                </Dropdown.Item>
               ))}
             </DropdownMenu>
           </Dropdown>
         </div>
         <div className={styles.varsContainer}>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Fusions: {fusions} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusFusions()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddFusions()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>
-              Effective Attacks: {effectives}{" "}
-            </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusEffectives()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddEffectives()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>
-              Facedown plays: {facedowns}{" "}
-            </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusFacedowns()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddFacedowns()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Magics activated: {magics} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusMagics()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddMagics()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Equips used: {equips} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusEquips()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddEquips()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Traps activated: {traps} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusTraps()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddTraps()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>
-              Defensive wins: {defensives}{" "}
-            </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusDefensives()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddDefensives()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Cards used: {cardsUsed} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusCardsUsed()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddCardsUsed()}
-            >
-              +
-            </Button>
-          </div>
-          <div className={styles.rankVar}>
-            <span className={styles.varLabel}>Turns: {turns} </span>
-            <Button
-              className={styles.minusButton}
-              onClick={() => clickMinusTurns()}
-            >
-              -
-            </Button>
-            <Button
-              className={styles.plusButton}
-              onClick={() => clickAddTurns()}
-            >
-              +
-            </Button>
-          </div>
+          {rankCalcVars.map((rcv) => (
+            <div className={styles.rankVar} key={rcv.key}>
+              <span className={styles.varLabel}>
+                {rcv.label} {rankCalcState[rcv.key]}
+              </span>
+              <Button
+                className={styles.minusButton}
+                onClick={() => handleButton(rcv.key, "-")}
+              >
+                -
+              </Button>
+              <Button
+                className={styles.plusButton}
+                onClick={() => handleButton(rcv.key, "+")}
+              >
+                +
+              </Button>
+            </div>
+          ))}
         </div>
         <div className={styles.rankDisplay}>
-          <span>
-            Current rank: {calculateTotalPoints()}
+          <span className={styles.varLabel}>
+            Current rank: {duelPoints}
             {" :: "}
-            <b>{getRankFromPoints(calculateTotalPoints())}</b>
+            <b>{getRankFromPoints(duelPoints)}</b>
           </span>
           <Button className={styles.resetButton} onClick={() => resetCalc()}>
             Reset
