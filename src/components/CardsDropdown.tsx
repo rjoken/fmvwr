@@ -14,7 +14,7 @@ function CardsDropdown({ cards, onSelectItem }: Props) {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleDropdownSelect = (item: number) => {
-    onSelectItem(item - 1);
+    onSelectItem(item);
   };
 
   const filteredOptions = cards.filter((item) =>
@@ -43,8 +43,8 @@ function CardsDropdown({ cards, onSelectItem }: Props) {
               }
             />
           </div>
-          {filteredOptions.map((item, index) => (
-            <Dropdown.Item key={index} eventKey={item.id}>
+          {filteredOptions.map((item) => (
+            <Dropdown.Item key={item.id} eventKey={item.id}>
               {item.name}
             </Dropdown.Item>
           ))}

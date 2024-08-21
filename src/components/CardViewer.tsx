@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Card from "../Card";
 import cardData from "../assets/cards.json";
 import CardAttribute from "../CardAttribute";
@@ -62,11 +63,36 @@ function CardViewer() {
     }
   );
 
-  const [selectedItem, setSelectedItem] = useState(0);
+  /* Finds the index of a card in the cards array given an id number.
+   * Returns the index if the id is found, and 0 otherwise.
+   */
+  const getCardIndexById = function (cards: Card[], id: number): number {
+    let result = cards.findIndex((c) => c.id == id);
+    if (result == -1) {
+      return 0;
+    } else {
+      return result;
+    }
+  };
+
+  const [urlCard, setUrlCard] = useSearchParams();
+  const defaultId = Number(urlCard.get("card"));
+  const [selectedItem, setSelectedItem] = useState<number>(
+    getCardIndexById(cards, defaultId)
+  );
+
+  // updates card id in url when selectedItem is changed
+  useEffect(() => {
+    setUrlCard({ card: String(cards[selectedItem].id) });
+  }, [selectedItem]);
 
   return (
     <>
-      <CardsDropdown cards={cards} onSelectItem={setSelectedItem} />
+      <h1>Card Viewer</h1>
+      <CardsDropdown
+        cards={cards}
+        onSelectItem={(item) => setSelectedItem(getCardIndexById(cards, item))}
+      />
       <CardDisplay selectedItem={cards[selectedItem]} />
     </>
   );

@@ -1,20 +1,22 @@
 import "./App.css";
 import React, { useState } from "react";
-import Title from "./components/Title";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CardViewer from "./components/CardViewer";
 import RankCalculator from "./components/RankCalculator";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(0);
-
   return (
     <>
-      <Navbar onPageClick={setCurrentPage} />
-      <Title />
+      <Navbar />
       <div className="content-container">
-        {currentPage === 0 && <CardViewer />}
-        {currentPage === 1 && <RankCalculator />}
+        <Router>
+          <Routes>
+            <Route path="/" element={<CardViewer />} />
+            <Route path="/viewer" element={<CardViewer />} />
+            <Route path="/calculator" element={<RankCalculator />} />
+          </Routes>
+        </Router>
       </div>
     </>
   );

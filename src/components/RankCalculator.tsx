@@ -246,186 +246,199 @@ function RankCalculator() {
   };
 
   return (
-    <div className={styles.calculator}>
-      <div className={styles.vcContainer}>
-        <label htmlFor="vcDropdown">Victory Condition: </label>
-        <Dropdown
-          id="vcDropdown"
-          onSelect={(eventKey) => setVictoryCondition(Number(eventKey))}
-        >
-          <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
-            {
-              victoryConditions.filter((vc) => vc.id === victoryCondition)[0]
-                .name
-            }
-          </Dropdown.Toggle>
-          <DropdownMenu>
-            {victoryConditions.map((vc) => (
-              <Dropdown.Item eventKey={vc.id}>{vc.name}</Dropdown.Item>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-      <div className={styles.lpContainer}>
-        <label htmlFor="lpDropdown">Remaining Life Points: </label>
-        <Dropdown
-          id="lpDropdown"
-          onSelect={(eventKey) => setLifePoints(Number(eventKey))}
-        >
-          <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
-            {lifePointsPossible.filter((lp) => lp.id === lifePoints)[0].name}
-          </Dropdown.Toggle>
-          <DropdownMenu>
-            {lifePointsPossible.map((lp) => (
-              <Dropdown.Item eventKey={lp.id}>{lp.name}</Dropdown.Item>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-      <div className={styles.varsContainer}>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Fusions: {fusions} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusFusions()}
+    <>
+      <h1>Rank Calculator</h1>
+      <div className={styles.calculator}>
+        <div className={styles.vcContainer}>
+          <label htmlFor="vcDropdown">Victory Condition: </label>
+          <Dropdown
+            id="vcDropdown"
+            onSelect={(eventKey) => setVictoryCondition(Number(eventKey))}
           >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddFusions()}
-          >
-            +
-          </Button>
+            <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
+              {
+                victoryConditions.filter((vc) => vc.id === victoryCondition)[0]
+                  .name
+              }
+            </Dropdown.Toggle>
+            <DropdownMenu>
+              {victoryConditions.map((vc) => (
+                <Dropdown.Item eventKey={vc.id}>{vc.name}</Dropdown.Item>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>
-            Effective Attacks: {effectives}{" "}
+        <div className={styles.lpContainer}>
+          <label htmlFor="lpDropdown">Remaining Life Points: </label>
+          <Dropdown
+            id="lpDropdown"
+            onSelect={(eventKey) => setLifePoints(Number(eventKey))}
+          >
+            <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
+              {lifePointsPossible.filter((lp) => lp.id === lifePoints)[0].name}
+            </Dropdown.Toggle>
+            <DropdownMenu>
+              {lifePointsPossible.map((lp) => (
+                <Dropdown.Item eventKey={lp.id}>{lp.name}</Dropdown.Item>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div className={styles.varsContainer}>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Fusions: {fusions} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusFusions()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddFusions()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>
+              Effective Attacks: {effectives}{" "}
+            </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusEffectives()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddEffectives()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>
+              Facedown plays: {facedowns}{" "}
+            </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusFacedowns()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddFacedowns()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Magics activated: {magics} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusMagics()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddMagics()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Equips used: {equips} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusEquips()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddEquips()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Traps activated: {traps} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusTraps()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddTraps()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>
+              Defensive wins: {defensives}{" "}
+            </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusDefensives()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddDefensives()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Cards used: {cardsUsed} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusCardsUsed()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddCardsUsed()}
+            >
+              +
+            </Button>
+          </div>
+          <div className={styles.rankVar}>
+            <span className={styles.varLabel}>Turns: {turns} </span>
+            <Button
+              className={styles.minusButton}
+              onClick={() => clickMinusTurns()}
+            >
+              -
+            </Button>
+            <Button
+              className={styles.plusButton}
+              onClick={() => clickAddTurns()}
+            >
+              +
+            </Button>
+          </div>
+        </div>
+        <div className={styles.rankDisplay}>
+          <span>
+            Current rank: {calculateTotalPoints()}
+            {" :: "}
+            <b>{getRankFromPoints(calculateTotalPoints())}</b>
           </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusEffectives()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddEffectives()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Facedown plays: {facedowns} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusFacedowns()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddFacedowns()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Magics activated: {magics} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusMagics()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddMagics()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Equips used: {equips} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusEquips()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddEquips()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Traps activated: {traps} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusTraps()}
-          >
-            -
-          </Button>
-          <Button className={styles.plusButton} onClick={() => clickAddTraps()}>
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Defensive wins: {defensives} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusDefensives()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddDefensives()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Cards used: {cardsUsed} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusCardsUsed()}
-          >
-            -
-          </Button>
-          <Button
-            className={styles.plusButton}
-            onClick={() => clickAddCardsUsed()}
-          >
-            +
-          </Button>
-        </div>
-        <div className={styles.rankVar}>
-          <span className={styles.varLabel}>Turns: {turns} </span>
-          <Button
-            className={styles.minusButton}
-            onClick={() => clickMinusTurns()}
-          >
-            -
-          </Button>
-          <Button className={styles.plusButton} onClick={() => clickAddTurns()}>
-            +
+          <Button className={styles.resetButton} onClick={() => resetCalc()}>
+            Reset
           </Button>
         </div>
       </div>
-      <div className={styles.rankDisplay}>
-        <span>
-          Current rank: {calculateTotalPoints()}
-          {" :: "}
-          <b>{getRankFromPoints(calculateTotalPoints())}</b>
-        </span>
-        <Button className={styles.resetButton} onClick={() => resetCalc()}>
-          Reset
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }
 
