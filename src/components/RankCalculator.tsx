@@ -3,43 +3,20 @@ import styles from "./RankCalculator.module.css";
 import { Button, Dropdown, DropdownMenu } from "react-bootstrap";
 
 class RankCalcState {
-  victoryCondition: number;
-  lifePoints: number;
-  fusions: number;
-  effectives: number;
-  facedowns: number;
-  magics: number;
-  equips: number;
-  traps: number;
-  defensives: number;
-  cardsUsed: number;
-  turns: number;
-
+  // Using a class instead of an interface so that we can have default values
   constructor(
-    victoryCondition: number = 0,
-    lifePoints: number = 0,
-    fusions: number = 0,
-    effectives: number = 0,
-    facedowns: number = 0,
-    magics: number = 0,
-    equips: number = 0,
-    traps: number = 0,
-    defensives: number = 0,
-    cardsUsed: number = 0,
-    turns: number = 0
-  ) {
-    this.victoryCondition = victoryCondition < 0 ? 0 : victoryCondition;
-    this.lifePoints = lifePoints < 0 ? 0 : lifePoints;
-    this.fusions = fusions < 0 ? 0 : fusions;
-    this.effectives = effectives < 0 ? 0 : effectives;
-    this.facedowns = facedowns < 0 ? 0 : facedowns;
-    this.magics = magics < 0 ? 0 : magics;
-    this.equips = equips < 0 ? 0 : equips;
-    this.traps = traps < 0 ? 0 : traps;
-    this.defensives = defensives < 0 ? 0 : defensives;
-    this.cardsUsed = cardsUsed < 0 ? 0 : cardsUsed;
-    this.turns = turns < 0 ? 0 : turns;
-  }
+    public victoryCondition: number = 0,
+    public lifePoints: number = 0,
+    public fusions: number = 0,
+    public effectives: number = 0,
+    public facedowns: number = 0,
+    public magics: number = 0,
+    public equips: number = 0,
+    public traps: number = 0,
+    public defensives: number = 0,
+    public cardsUsed: number = 0,
+    public turns: number = 0
+  ) {}
 }
 
 function RankCalculator() {
@@ -91,8 +68,8 @@ function RankCalculator() {
     setRankCalcState((prev) => ({
       /*
        * Return the previous RankCalcState, with the [key] property changed using spread operator.
-       * If the operation is not +, and -ing 1 from the current RankCalcState would be <= 0,
-       * return prev.
+       * If the operation is not +, and -ing 1 from the current RankCalcState would be <= 0, return prev.
+       * Do not want minus values!
        */
       ...prev,
       [key]:
@@ -214,7 +191,12 @@ function RankCalculator() {
     }
   };
 
-  /* Final duel score taking all duel variables into account */
+  /*
+   * Final duel score taking all duel variables into account
+   * Formula has been reverse-engineered from ingame memory values.
+   * Specifically, you can find it at 0x1798A8
+   * Read more here: https://datacrystal.tcrf.net/wiki/Yu-Gi-Oh!_Forbidden_Memories/RAM_map
+   */
   const calculateTotalPoints = (
     victoryCondition: number,
     fusions: number,

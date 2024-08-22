@@ -12,3 +12,5 @@ A React web application to view data about the game "Yu-Gi-Oh Forbidden Memories
 - Fusion search
 - Better card display with type and attribute images
 - View enemy card drops and calculate drop percentages
+
+### cards.json was provided by [duke1102](https://github.com/duke1102)
