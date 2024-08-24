@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Card from "../Card";
 import cardData from "../assets/cards.json";
@@ -7,62 +7,52 @@ import CardType from "../CardType";
 import CardDisplay from "./CardDisplay";
 import CardsDropdown from "./CardsDropdown";
 
+/*
+ * Initialise the card data so that we can choose them from the dropdown
+ * Dictionary with card id as key
+ */
+const cards: { [id: number]: Card } = cardData.reduce(
+  (acc: { [id: number]: Card }, item) => {
+    acc[item.Id] = new Card(
+      item.Name,
+      item.Description,
+      item.Id,
+      item.GuardianStarA,
+      item.GuardianStarB,
+      item.Level,
+      item.Type as CardType,
+      item.Attribute as CardAttribute,
+      item.Attack,
+      item.Defense,
+      item.Stars,
+      item.CardCode,
+      item.Equip,
+      item.Fusions.map((fusion) => ({
+        card1: fusion._card1,
+        card2: fusion._card2,
+        result: fusion._result,
+      })),
+      item.Ritual.map((ritual) => ({
+        ritualCard: ritual.RitualCard,
+        card1: ritual.Card1,
+        card2: ritual.Card2,
+        card3: ritual.Card3,
+        result: ritual.Card3,
+      }))
+    );
+    return acc;
+  },
+  {} as { [id: number]: Card }
+);
+
 function CardViewer() {
-  /*
-   * Initialise the card data so that we can choose them from the dropdown
-   * With useMemo we can cache this data so that it's not reassigned on every rerender
-   * unless cardData is changed
-   */
-  const cards: Card[] = useMemo(
-    () =>
-      cardData.map((item) => {
-        return new Card(
-          item.Name,
-          item.Description,
-          item.Id,
-          item.GuardianStarA,
-          item.GuardianStarB,
-          item.Level,
-          item.Type as CardType,
-          item.Attribute as CardAttribute,
-          item.Attack,
-          item.Defense,
-          item.Stars,
-          item.CardCode,
-          item.Equip,
-          item.Fusions.map((fusion) => ({
-            card1: fusion._card1,
-            card2: fusion._card2,
-            result: fusion._result,
-          })),
-          item.Ritual.map((ritual) => ({
-            ritualCard: ritual.RitualCard,
-            card1: ritual.Card1,
-            card2: ritual.Card2,
-            card3: ritual.Card3,
-            result: ritual.Card3,
-          }))
-        );
-      }),
-    [cardData]
-  );
-
-  /* Finds the index of a card in the cards array given an id number.
-   * Returns the index if the id is found, and 0 otherwise.
-   */
-  const getCardIndexById = function (cards: Card[], id: number): number {
-    let result = cards.findIndex((c) => c.id == id);
-    if (result == -1) {
-      return 0;
-    } else {
-      return result;
-    }
-  };
-
+  // get "card" url parameter
   const [urlCard, setUrlCard] = useSearchParams();
   const defaultId = Number(urlCard.get("card"));
+
+  // if defaultId is a valid key of cards dictionary, use it, otherwise 1
   const [selectedItem, setSelectedItem] = useState<number>(
-    getCardIndexById(cards, defaultId)
+    defaultId in cards ? defaultId : 1
   );
 
   // updates card id in url when selectedItem is changed
@@ -74,8 +64,8 @@ function CardViewer() {
     <>
       <h1>Card Viewer</h1>
       <CardsDropdown
-        cards={cards}
-        onSelectItem={(item) => setSelectedItem(getCardIndexById(cards, item))}
+        cards={Object.values(cards)}
+        onSelectItem={(item) => setSelectedItem(cards[item].id)}
       />
       <CardDisplay selectedItem={cards[selectedItem]} />
     </>

@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "../Card";
 import GuardianStar from "../GuardianStar";
 import CardType from "../CardType";
@@ -12,13 +11,13 @@ interface Props {
 
 function CardDisplay({ selectedItem }: Props) {
   // Want to display unicode star character a given number of times based on level
-  var starsString = [];
+  let starsString: string = "";
   for (let i = 0; i < selectedItem.level; i++) {
-    starsString.push(<span key={i}>★</span>);
+    starsString += "★";
   }
 
   // Styling for different types of cards
-  let containerClass = styles.monster;
+  let containerClass: string = styles.monster;
   if (
     selectedItem.type === CardType.Magic ||
     selectedItem.type === CardType.Equip
@@ -29,6 +28,7 @@ function CardDisplay({ selectedItem }: Props) {
   } else if (selectedItem.type === CardType.Ritual) {
     containerClass = styles.ritual;
   }
+
   return (
     <>
       <div className={[styles.ygocard, containerClass].join(" ")}>

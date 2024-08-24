@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import Card from "../Card";
 import styles from "./CardsDropdown.module.css";
@@ -9,14 +9,15 @@ interface Props {
 }
 
 function CardsDropdown({ cards, onSelectItem }: Props) {
-  let text: string = "Select a card...";
-
+  /* state variable for search query string entered into textbox */
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  /* When a card is selected from the dropdown */
   const handleDropdownSelect = (item: number) => {
     onSelectItem(item);
   };
 
+  /* cards list filtered by search query */
   const filteredOptions = cards.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -29,7 +30,7 @@ function CardsDropdown({ cards, onSelectItem }: Props) {
           id="dropdown-basic"
           className={styles.dropButton}
         >
-          {text}
+          {"Select a card..."}
         </Dropdown.Toggle>
         <Dropdown.Menu className={styles.menu_scroll}>
           <div className="sticky-top bg-white p-2">
