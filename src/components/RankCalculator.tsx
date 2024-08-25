@@ -260,10 +260,21 @@ function RankCalculator() {
     setRankCalcState(new RankCalcState());
   };
 
+  const aTecMode = () => {
+    setRankCalcState((prev) => {
+      return { ...prev, turns: 9, cardsUsed: 37, lifePoints: 2 };
+    });
+  };
+
   return (
     <>
       <h1>Rank Calculator</h1>
       <div className={styles.calculator}>
+        <div>
+          <Button className={styles.fullWidthButton} onClick={() => aTecMode()}>
+            A-Tec Mode
+          </Button>
+        </div>
         <div className={styles.vcContainer}>
           <label htmlFor="vcDropdown">Victory Condition: </label>
           <Dropdown
