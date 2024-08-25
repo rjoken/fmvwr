@@ -20,13 +20,13 @@ class RankCalcState {
 }
 
 /* Assign these IDs to different victory types and life point thresholds */
-const victoryConditions = [
+const victoryConditions: { name: string; id: number }[] = [
   { name: "Total Annihilation", id: 0 },
   { name: "Victory by Attrition", id: 1 },
   { name: "Victory by Exodia", id: 2 },
 ];
 
-const lifePointsPossible = [
+const lifePointsPossible: { name: string; id: number }[] = [
   { name: "8000", id: 0 },
   { name: "7000-7999", id: 1 },
   { name: "1000-6999", id: 2 },
@@ -38,7 +38,7 @@ const lifePointsPossible = [
  * "map" of information for buttons and labels, at least for the simple controls.
  * Dropdowns created more manually.
  */
-const rankCalcVars = [
+const rankCalcVars: { label: string; key: keyof RankCalcState }[] = [
   { label: "Fusions: ", key: "fusions" as keyof RankCalcState },
   { label: "Effective attacks: ", key: "effectives" as keyof RankCalcState },
   { label: "Facedown plays: ", key: "facedowns" as keyof RankCalcState },
@@ -163,7 +163,7 @@ const calculateTotalPoints = (
   defensives: number,
   lifePoints: number
 ) => {
-  let victoryConditionPoints = 0;
+  let victoryConditionPoints: number = 0;
   if (victoryCondition === 0) victoryConditionPoints = 2;
   else if (victoryCondition === 1) victoryConditionPoints = -40;
   else if (victoryCondition === 2) victoryConditionPoints = 40;
