@@ -15,8 +15,11 @@ class RankCalcState {
     public traps: number = 0,
     public defensives: number = 0,
     public cardsUsed: number = 0,
-    public turns: number = 0
-  ) {}
+    public turns: number = 0,
+    public duelPoints: number = 0
+  ) {
+    this.duelPoints = calculateTotalPoints(this);
+  }
 }
 
 /* Assign these IDs to different victory types and life point thresholds */
@@ -39,15 +42,15 @@ const lifePointsPossible: { name: string; id: number }[] = [
  * Dropdowns created more manually.
  */
 const rankCalcVars: { label: string; key: keyof RankCalcState }[] = [
-  { label: "Fusions: ", key: "fusions" as keyof RankCalcState },
-  { label: "Effective attacks: ", key: "effectives" as keyof RankCalcState },
-  { label: "Facedown plays: ", key: "facedowns" as keyof RankCalcState },
-  { label: "Magics activated: ", key: "magics" as keyof RankCalcState },
-  { label: "Equips used: ", key: "equips" as keyof RankCalcState },
-  { label: "Traps activated: ", key: "traps" as keyof RankCalcState },
-  { label: "Defensive wins: ", key: "defensives" as keyof RankCalcState },
-  { label: "Cards used: ", key: "cardsUsed" as keyof RankCalcState },
-  { label: "Turns: ", key: "turns" as keyof RankCalcState },
+  { label: "Fusions: ", key: "fusions" },
+  { label: "Effective attacks: ", key: "effectives" },
+  { label: "Facedown plays: ", key: "facedowns" },
+  { label: "Magics activated: ", key: "magics" },
+  { label: "Equips used: ", key: "equips" },
+  { label: "Traps activated: ", key: "traps" },
+  { label: "Defensive wins: ", key: "defensives" },
+  { label: "Cards used: ", key: "cardsUsed" },
+  { label: "Turns: ", key: "turns" },
 ];
 
 /*
@@ -144,42 +147,39 @@ const getLPPoints = (lp: number) => {
   }
 };
 
+const getVCPoints = (vc: number) => {
+  switch (vc) {
+    case 0:
+      return 2;
+    case 1:
+      return -40;
+    case 2:
+      return 40;
+    default:
+      return 2;
+  }
+};
+
 /*
  * Final duel score taking all duel variables into account
  * Formula has been reverse-engineered from ingame memory values.
  * Specifically, you can find it at 0x1798A8
  * Read more here: https://datacrystal.tcrf.net/wiki/Yu-Gi-Oh!_Forbidden_Memories/RAM_map
  */
-const calculateTotalPoints = (
-  victoryCondition: number,
-  fusions: number,
-  cardsUsed: number,
-  facedowns: number,
-  effectives: number,
-  equips: number,
-  magics: number,
-  traps: number,
-  turns: number,
-  defensives: number,
-  lifePoints: number
-) => {
-  let victoryConditionPoints: number = 0;
-  if (victoryCondition === 0) victoryConditionPoints = 2;
-  else if (victoryCondition === 1) victoryConditionPoints = -40;
-  else if (victoryCondition === 2) victoryConditionPoints = 40;
+const calculateTotalPoints = (state: RankCalcState) => {
   return (
     50 +
-    getFusionPoints(fusions) +
-    getCardsPoints(cardsUsed) +
-    getFacedownPoints(facedowns) +
-    getEffectivePoints(effectives) +
-    getEquipPoints(equips) +
-    getMagicPoints(magics) +
-    getTrapPoints(traps) +
-    getTurnPoints(turns) +
-    getDefensivePoints(defensives) +
-    getLPPoints(lifePoints) +
-    victoryConditionPoints
+    getFusionPoints(state.fusions) +
+    getCardsPoints(state.cardsUsed) +
+    getFacedownPoints(state.facedowns) +
+    getEffectivePoints(state.effectives) +
+    getEquipPoints(state.equips) +
+    getMagicPoints(state.magics) +
+    getTrapPoints(state.traps) +
+    getTurnPoints(state.turns) +
+    getDefensivePoints(state.defensives) +
+    getLPPoints(state.lifePoints) +
+    getVCPoints(state.victoryCondition)
   );
 };
 
@@ -208,26 +208,6 @@ function RankCalculator() {
     new RankCalcState()
   );
 
-  // Update duelPoints whenever rankCalcState is updated
-  const [duelPoints, setDuelPoints] = useState<number>(0);
-  useMemo(() => {
-    setDuelPoints(
-      calculateTotalPoints(
-        rankCalcState.victoryCondition,
-        rankCalcState.fusions,
-        rankCalcState.cardsUsed,
-        rankCalcState.facedowns,
-        rankCalcState.effectives,
-        rankCalcState.equips,
-        rankCalcState.magics,
-        rankCalcState.traps,
-        rankCalcState.turns,
-        rankCalcState.defensives,
-        rankCalcState.lifePoints
-      )
-    );
-  }, [rankCalcState]);
-
   /*
    * When a plus or minus button is clicked, set the counts appropriately
    * Handle dynamically given a key of the state object to update, and whether we are +ing or -ing
@@ -251,7 +231,12 @@ function RankCalculator() {
         newValue = value > 0 ? value - 1 : value;
       }
 
-      return { ...prev, [key]: newValue };
+      const updatedState = { ...prev, [key]: newValue };
+      updatedState.duelPoints = calculateTotalPoints(
+        updatedState as RankCalcState
+      );
+
+      return updatedState;
     });
   };
 
@@ -344,9 +329,9 @@ function RankCalculator() {
         </div>
         <div className={styles.rankDisplay}>
           <span className={styles.varLabel}>
-            Current rank: {duelPoints}
+            Current rank: {rankCalcState.duelPoints}
             {" :: "}
-            <b>{getRankFromPoints(duelPoints)}</b>
+            <b>{getRankFromPoints(rankCalcState.duelPoints)}</b>
           </span>
           <Button className={styles.resetButton} onClick={() => resetCalc()}>
             Reset
@@ -356,5 +341,4 @@ function RankCalculator() {
     </>
   );
 }
-
 export default RankCalculator;
