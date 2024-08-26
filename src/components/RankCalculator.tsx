@@ -247,7 +247,11 @@ function RankCalculator() {
 
   const aTecMode = () => {
     setRankCalcState((prev) => {
-      return { ...prev, turns: 9, cardsUsed: 37, lifePoints: 2 };
+      const updatedState = { ...prev, turns: 9, cardsUsed: 37, lifePoints: 2 };
+      updatedState.duelPoints = calculateTotalPoints(
+        updatedState as RankCalcState
+      );
+      return updatedState;
     });
   };
 
