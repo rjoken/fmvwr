@@ -54,7 +54,7 @@ function RankCalculator() {
   const handleButton = (
     key: keyof RankCalcUtils.RankCalcState,
     operation: ButtonOperator
-  ) => {
+  ): void => {
     setRankCalcState((prev) => {
       /*
        * Return the previous RankCalcState, with the [key] property changed using spread operator.
@@ -77,16 +77,32 @@ function RankCalculator() {
       updatedState.duelPoints =
         RankCalcUtils.calculateTotalPoints(updatedState);
 
-      return { ...updatedState };
+      return updatedState;
+    });
+  };
+
+  const handleDropdown = (
+    key: keyof RankCalcUtils.RankCalcState,
+    eventKey: number
+  ): void => {
+    setRankCalcState((prev) => {
+      const updatedState: RankCalcUtils.RankCalcState = {
+        ...prev,
+        [key]: eventKey,
+      };
+      updatedState.duelPoints =
+        RankCalcUtils.calculateTotalPoints(updatedState);
+
+      return updatedState;
     });
   };
 
   /* Reset all values to zero */
-  const resetCalc = () => {
+  const resetCalc = (): void => {
     setRankCalcState(RankCalcUtils.defaultRankCalcState());
   };
 
-  const aTecMode = () => {
+  const aTecMode = (): void => {
     setRankCalcState((prev) => {
       const updatedState = { ...prev, turns: 9, cardsUsed: 37, lifePoints: 2 };
       updatedState.duelPoints = RankCalcUtils.calculateTotalPoints(
@@ -110,10 +126,7 @@ function RankCalculator() {
           <Dropdown
             id="vcDropdown"
             onSelect={(eventKey) =>
-              setRankCalcState({
-                ...rankCalcState,
-                victoryCondition: Number(eventKey),
-              })
+              handleDropdown("victoryCondition", Number(eventKey))
             }
           >
             <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
@@ -133,10 +146,7 @@ function RankCalculator() {
           <Dropdown
             id="lpDropdown"
             onSelect={(eventKey) =>
-              setRankCalcState({
-                ...rankCalcState,
-                lifePoints: Number(eventKey),
-              })
+              handleDropdown("lifePoints", Number(eventKey))
             }
           >
             <Dropdown.Toggle id="dropdown-basic" className={styles.dropButton}>
