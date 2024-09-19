@@ -1,39 +1,19 @@
-.ygocard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 320px;
-    padding: 20px;
-    border-radius: 15px;
-    margin: 20px;
-}
-
-.ygocard img {
-    margin: 15px;
-    box-shadow: 0 4px 8px 0;
-}
-
-.ygocard.monster {   
+.monster {   
     border: 4px solid hsl(45, 50%, 40%);
     background-image: repeating-linear-gradient(36deg in oklab, hsl(55, 70%, 50%),  hsl(55, 70%, 60%) 5px);
 }
 
-.ygocard.magic {
+.magic {
     border: 4px solid hsl(128, 100%, 20%);
     background-image: repeating-linear-gradient(36deg in oklab, hsl(128, 100%, 40%), hsl(128, 100%, 30%) 5px);
 }
 
-.ygocard.ritual {
+.ritual {
     border: 4px solid hsl(216, 100%, 40%);
     background-image: repeating-linear-gradient(36deg in oklab, hsl(216, 100%, 50%), hsl(216, 100%, 60%) 5px);
 }
 
-.ygocard.trap {
+.trap {
     border: 4px solid hsl(330, 100%, 30%);
     background-image: repeating-linear-gradient(36deg in oklab, hsl(330, 75%, 40%), hsl(330, 75%, 50%) 5px);
-}
-
-.stars {
-    flex-direction: row;
 }
